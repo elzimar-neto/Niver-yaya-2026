@@ -58,31 +58,73 @@
             letter-spacing: 1px;
         }
 
+        .btn-box {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .enter-btn {
+            position: absolute;
             background-color: #ff3385;
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
+            padding: 16px 45px;
+            font-size: 1.15rem;
             font-weight: 600;
             border-radius: 50px;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(232, 67, 147, 0.3);
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 2px;
+            white-space: nowrap;
         }
 
         .enter-btn:hover {
-            transform: scale(1.05);
             background-color: #d63031;
-            box-shadow: 0 15px 30px rgba(214, 48, 49, 0.4);
         }
 
         #welcome-overlay.hidden {
             opacity: 0;
             pointer-events: none;
             transform: scale(1.05);
+        }
+
+        /* --- MARCA-D'ÁGUA TEMPORAL AJUSTADA: MENOR E MAIS MARCADA --- */
+        .timestamp-watermark {
+            position: fixed;
+            bottom: 40px;
+            left: 30px; /* Posicionamento fixo na esquerda */
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+            
+            /* MODIFICADO: Fonte menor para descrição, mas peso e opacidade aumentados */
+            font-size: 1.8rem; 
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: rgba(255, 51, 133, 0.6); /* Bem mais marcada e visível */
+            
+            z-index: 500;
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        .timestamp-watermark span {
+            color: rgba(214, 48, 49, 0.9); /* Destaque marcante no ano de 2026 */
+            font-weight: 800;
+        }
+
+        @media (max-width: 768px) {
+            .timestamp-watermark {
+                display: none; /* Oculta em telas de celular para não cobrir as fotos */
+            }
         }
 
         /* --- ELEMENTOS GRÁFICOS FLUTUANTES --- */
@@ -356,7 +398,6 @@
 
         footer span { color: #ff3385; font-weight: 600; }
 
-        /* --- BOTÃO CONTROLE DE MÍDIA DYNÂMICO --- */
         .music-btn {
             position: fixed;
             bottom: 30px;
@@ -391,9 +432,13 @@
 
     <div id="welcome-overlay">
         <h2>Para: Laryssa ❤️</h2>
-        <p>Preparei uma surpresa especial para comemorar o seu dia.</p>
-        <button class="enter-btn" onclick="startExperience()">Entrar e Ouvir</button>
+        <p>Preparei uma surpresa especial para comemorar o seu dia. Toque abaixo para abrir!</p>
+        <div class="btn-box">
+            <button id="fleeing-btn" class="enter-btn" onmouseover="flee()" onclick="startExperience()">Entrar e Ouvir</button>
+        </div>
     </div>
+
+    <div class="timestamp-watermark">Maranhão — 27 de Maio de <span>2026</span></div>
 
     <div class="decorations" id="vector-decorations-container"></div>
 
@@ -456,7 +501,7 @@
     </div>
 
     <footer>
-        <p>Criado com todo o amor que há no mundo por <span>Neto</span> | 2026</p>
+        <p>Criado com todo o amor que há no mundo por <span>Neto</span> | 27/05/2026</p>
     </footer>
 
     <script>
@@ -475,8 +520,25 @@
         const decorContainer = document.getElementById('vector-decorations-container');
         const music = document.getElementById('bg-music');
         const mediaBtn = document.getElementById('media-control-btn');
+        const fleeingBtn = document.getElementById('fleeing-btn');
 
-        // FUNÇÃO QUE INICIA A EXPERIÊNCIA
+        let fleeCount = 0;
+
+        function flee() {
+            if (fleeCount < 3) {
+                const x = (Math.random() - 0.5) * 450; 
+                const y = (Math.random() - 0.5) * 220; 
+                
+                fleeingBtn.style.transform = `translate(${x}px, ${y}px)`;
+                fleeCount++;
+                
+                if (fleeCount === 3) {
+                    fleeingBtn.style.backgroundColor = "#2ed573"; 
+                    fleeingBtn.innerText = "Calma, agora eu deixo! 😂";
+                }
+            }
+        }
+
         function startExperience() {
             document.getElementById('welcome-overlay').classList.add('hidden');
             music.play().then(() => {
@@ -517,7 +579,7 @@
             photoDestination.appendChild(div);
         }
 
-        // Gerador do Slide de Vídeos com Interceptação de Áudio
+        // Gerador do Slide de Vídeos
         for (let j = 1; j <= TOTAL_VIDEOS; j++) {
             const wrapper = document.createElement('div');
             wrapper.className = `video-wrapper ${j === 1 ? 'active' : ''}`;
@@ -529,7 +591,6 @@
             
             const videoElement = wrapper.querySelector('video');
             
-            // ADICIONADO: Se ela der play no vídeo, a música de fundo pausa imediatamente
             videoElement.addEventListener('play', () => {
                 if (!music.paused) {
                     music.pause();
