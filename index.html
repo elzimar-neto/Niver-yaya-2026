@@ -26,7 +26,54 @@
             background-position: 0 0, 3px 3px, 0 0;
         }
 
-        /* --- TELA DE ENTRADA (CORTINA) --- */
+        /* --- 1. TELA DE LOADING INICIAL --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a0510;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #loading-screen h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #ff3385;
+            margin-bottom: 15px;
+        }
+
+        #loading-screen p {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            max-width: 600px;
+            line-height: 1.6;
+            color: #f1f2f6;
+        }
+
+        .heart-loader {
+            font-size: 4rem;
+            margin-top: 30px;
+            animation: heartPulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes heartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- 2. TELA DO MINI GAME DE AMOR (OVERLAY) --- */
         #welcome-overlay {
             position: fixed;
             top: 0;
@@ -46,69 +93,89 @@
 
         #welcome-overlay h2 {
             font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             color: #d63031;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        #welcome-overlay p {
-            font-size: 1.1rem;
+        #game-instructions {
+            font-size: 1.15rem;
             color: #636e72;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             letter-spacing: 1px;
+            max-width: 600px;
         }
 
-        .btn-box {
+        #game-score {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ff3385;
+            background: #fff;
+            padding: 10px 30px;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(232, 67, 147, 0.1);
+            border: 2px dashed rgba(232, 67, 147, 0.3);
+        }
+
+        #game-feedback {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #e84393;
+            height: 45px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .game-area {
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            height: 300px;
+            width: 95%;
+            max-width: 900px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 25px;
+            border: 3px dashed rgba(232, 67, 147, 0.25);
+            overflow: hidden;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.02);
+        }
+
+        /* AJUSTADO: Botão maior e transição mais suave para facilitar o clique */
+        .game-btn {
+            position: absolute;
+            background-color: transparent;
+            border: none;
+            font-size: 4rem; /* Coração um pouco maior */
+            cursor: pointer;
+            width: 120px; /* Área de clique ampliada significativamente */
+            height: 120px;
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Movimento mais suave e menos brusco */
+            transition: top 0.4s ease-out, left 0.4s ease-out;
+            top: 40%;
+            left: 43%;
+            user-select: none;
+            outline: none;
         }
 
-        .enter-btn {
-            position: absolute;
-            background-color: #ff3385;
-            color: white;
-            border: none;
-            padding: 16px 45px;
-            font-size: 1.15rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(232, 67, 147, 0.3);
-            transition: background-color 0.3s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            white-space: nowrap;
-        }
-
-        .enter-btn:hover {
-            background-color: #d63031;
-        }
-
-        #welcome-overlay.hidden {
+        #welcome-overlay.hidden, #loading-screen.hidden {
             opacity: 0;
             pointer-events: none;
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
-        /* --- MARCA-D'ÁGUA TEMPORAL AJUSTADA: MENOR E MAIS MARCADA --- */
+        /* --- 3. MARCA-D'ÁGUA TEMPORAL --- */
         .timestamp-watermark {
             position: fixed;
             bottom: 40px;
-            left: 30px; /* Posicionamento fixo na esquerda */
+            left: 30px; 
             transform: rotate(-90deg);
             transform-origin: left bottom;
-            
-            /* MODIFICADO: Fonte menor para descrição, mas peso e opacidade aumentados */
             font-size: 1.8rem; 
             font-weight: 700;
             letter-spacing: 8px;
-            color: rgba(255, 51, 133, 0.6); /* Bem mais marcada e visível */
-            
+            color: rgba(255, 51, 133, 0.6); 
             z-index: 500;
             pointer-events: none;
             white-space: nowrap;
@@ -117,17 +184,16 @@
         }
 
         .timestamp-watermark span {
-            color: rgba(214, 48, 49, 0.9); /* Destaque marcante no ano de 2026 */
+            color: rgba(214, 48, 49, 0.9); 
             font-weight: 800;
         }
 
         @media (max-width: 768px) {
-            .timestamp-watermark {
-                display: none; /* Oculta em telas de celular para não cobrir as fotos */
-            }
+            .timestamp-watermark { display: none; }
+            .game-area { height: 380px; }
         }
 
-        /* --- ELEMENTOS GRÁFICOS FLUTUANTES --- */
+        /* --- ELEMENTOS FLUTUANTES --- */
         .decorations {
             position: fixed;
             top: 0;
@@ -164,7 +230,7 @@
             transform: translateY(0);
         }
 
-        /* --- SEÇÃO 1: HERO --- */
+        /* --- HERO SEÇÃO --- */
         .hero {
             height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.55)), url('foto1.jpg') no-repeat center center/cover;
@@ -196,7 +262,7 @@
             text-transform: uppercase;
         }
 
-        /* --- SEÇÃO 2: CARTA --- */
+        /* --- CARTA SEÇÃO --- */
         .love-letter {
             max-width: 850px;
             margin: 100px auto;
@@ -204,24 +270,11 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.96);
             border-radius: 30px;
-            box-shadow: 
-                0 30px 70px rgba(232, 67, 147, 0.08),
-                0 0 0 10px rgba(255, 255, 255, 0.5),
-                inset 0 0 40px rgba(232, 67, 147, 0.03);
+            box-shadow: 0 30px 70px rgba(232, 67, 147, 0.08), 0 0 0 10px rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(232, 67, 147, 0.15);
             position: relative;
             z-index: 1;
         }
-
-        .love-letter::before, .love-letter::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 2px solid #fab1a0;
-        }
-        .love-letter::before { top: 20px; left: 20px; border-right: none; border-bottom: none; }
-        .love-letter::after { bottom: 20px; right: 20px; border-left: none; border-top: none; }
 
         .love-letter h2 {
             font-family: 'Dancing Script', cursive;
@@ -238,7 +291,6 @@
             font-weight: 300;
         }
 
-        /* --- BLOCOS DE FRASES --- */
         .love-quote {
             max-width: 750px;
             margin: 100px auto;
@@ -249,16 +301,6 @@
             background: rgba(255, 255, 255, 0.4);
             border-radius: 20px;
             border: 1px dashed rgba(232, 67, 147, 0.25);
-        }
-
-        .love-quote::before {
-            content: '“';
-            font-family: 'Dancing Script', cursive;
-            font-size: 8rem;
-            color: rgba(232, 67, 147, 0.12);
-            position: absolute;
-            top: -40px;
-            left: 20px;
         }
 
         .love-quote p {
@@ -279,7 +321,7 @@
             margin-top: 20px;
         }
 
-        /* --- MOLDURA DOS CARROSSEIS --- */
+        /* --- CARROSSEIS --- */
         .carousel-section {
             padding: 100px 20px;
             text-align: center;
@@ -308,9 +350,7 @@
             margin: 0 auto;
             border-radius: 30px;
             overflow: hidden;
-            box-shadow: 
-                0 35px 80px rgba(0,0,0,0.22),
-                0 0 0 12px #fff; 
+            box-shadow: 0 35px 80px rgba(0,0,0,0.22), 0 0 0 12px #fff; 
             background: #fff;
             border: 2px solid rgba(0,0,0,0.05);
             transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -334,7 +374,6 @@
 
         video { max-height: 75vh; background-color: #000; }
 
-        /* Botões de Direção */
         .nav-btn {
             position: absolute;
             top: 50%;
@@ -384,7 +423,6 @@
             z-index: 10;
         }
 
-        /* --- FOOTER --- */
         footer {
             text-align: center;
             padding: 70px 20px;
@@ -395,8 +433,6 @@
             z-index: 1;
             border-top: 3px solid #ff3385;
         }
-
-        footer span { color: #ff3385; font-weight: 600; }
 
         .music-btn {
             position: fixed;
@@ -418,7 +454,6 @@
             transition: all 0.3s ease;
         }
         
-        .music-btn:hover { transform: scale(1.1); }
         .music-btn.playing { background-color: #2ed573; box-shadow: 0 8px 25px rgba(46, 213, 115, 0.4); }
 
         @keyframes heartBeat {
@@ -430,11 +465,20 @@
 </head>
 <body>
 
+    <div id="loading-screen">
+        <h1>Feliz Aniversário, Laryssa!</h1>
+        <p>Preparando o nosso espaço secreto... Estamos organizando as vossas melhores fotos, vídeos espontâneos e risadas para criar um porto seguro de memórias só nosso.</p>
+        <div class="heart-loader">💝</div>
+    </div>
+
     <div id="welcome-overlay">
-        <h2>Para: Laryssa ❤️</h2>
-        <p>Preparei uma surpresa especial para comemorar o seu dia. Toque abaixo para abrir!</p>
-        <div class="btn-box">
-            <button id="fleeing-btn" class="enter-btn" onmouseover="flee()" onclick="startExperience()">Entrar e Ouvir</button>
+        <h2>Match Perfeito: Capturando Nosso Amor ❤️</h2>
+        <p id="game-instructions">O coração está flutuando! Toque nele 3 vezes para coletar nosso carinho e destravar sua surpresa completa.</p>
+        <div id="game-score">Corações Coletados: 0 / 3</div>
+        <div id="game-feedback">Preparar... 💘</div>
+        
+        <div class="game-area" id="game-zone">
+            <button id="game-interaction-btn" class="game-btn" onmouseover="fleeFromMouse()" onclick="playLoveGame()">💖</button>
         </div>
     </div>
 
@@ -454,7 +498,7 @@
 
     <section class="love-letter fade-in">
         <h2>Para a Dona do Meu Coração...</h2>
-        <p>Hoje o mundo inteiro celebra o dia em que você nasceu, mas o maior presenteado sou eu, por ter o privilégio de caminhar ao seu lado. Laryssa, ver você completar mais um ano de vida enche o meu peito de orgulho e gratidão.</p>
+        <p>Hoje o world inteiro celebra o dia em que você nasceu, mas o maior presenteado sou eu, por ter o privilégio de caminhar ao seu lado. Laryssa, ver você completar mais um ano de vida enche o meu peito de orgulho e gratidão.</p>
         <p>Seu sorriso tem o poder de acalmar qualquer tempestade em mim. Obrigado por ser essa mulher incrível, parceira dedicada e o amor da minha vida. Que o seu novo ciclo seja repleto de sorrisos, saúde e conquistas.</p>
         <p><strong>Eu te amo além das palavras! ❤️</strong></p>
     </section>
@@ -505,13 +549,9 @@
     </footer>
 
     <script>
-        // =========================================================
-        // CONFIGURAÇÃO DOS SEUS ARQUIVOS
-        // =========================================================
-        const TOTAL_FOTOS = 44;  
-        const TOTAL_VIDEOS = 11;   
+        const TOTAL_FOTOS = 120;  
+        const TOTAL_VIDEOS = 5;   
         const TEMPO_FOTO = 3800;  
-        // =========================================================
 
         const photoDestination = document.getElementById('photo-slides-destination');
         const videoDestination = document.getElementById('video-carousel-destination');
@@ -520,22 +560,66 @@
         const decorContainer = document.getElementById('vector-decorations-container');
         const music = document.getElementById('bg-music');
         const mediaBtn = document.getElementById('media-control-btn');
-        const fleeingBtn = document.getElementById('fleeing-btn');
+        
+        const gameBtn = document.getElementById('game-interaction-btn');
+        const gameScore = document.getElementById('game-score');
+        const gameFeedback = document.getElementById('game-feedback');
+        const gameZone = document.getElementById('game-zone');
 
-        let fleeCount = 0;
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loading-screen');
+                loader.classList.add('hidden');
+            }, 6000);
+        });
 
-        function flee() {
-            if (fleeCount < 3) {
-                const x = (Math.random() - 0.5) * 450; 
-                const y = (Math.random() - 0.5) * 220; 
-                
-                fleeingBtn.style.transform = `translate(${x}px, ${y}px)`;
-                fleeCount++;
-                
-                if (fleeCount === 3) {
-                    fleeingBtn.style.backgroundColor = "#2ed573"; 
-                    fleeingBtn.innerText = "Calma, agora eu deixo! 😂";
-                }
+        let scoreCount = 0;
+        const FRASES_GAME = [
+            "Conseguiu! 🥰",
+            "Mais perto... Meu coração é seu! 💘",
+            "Vitória! Nosso amor ganhou! 👑"
+        ];
+
+        // AJUSTADO: Intervalo de movimento automático mais lento (1.4 segundos parado)
+        let gameMovementInterval = setInterval(() => {
+            moveHeartRandomly();
+        }, 1400);
+
+        function moveHeartRandomly() {
+            // Descontando a margem extra de toque do botão
+            const maxTop = gameZone.clientHeight - gameBtn.clientHeight - 40;
+            const maxLeft = gameZone.clientWidth - gameBtn.clientWidth - 40;
+            
+            const randomTop = Math.max(20, Math.floor(Math.random() * maxTop));
+            const randomLeft = Math.max(20, Math.floor(Math.random() * maxLeft));
+            
+            gameBtn.style.top = randomTop + 'px';
+            gameBtn.style.left = randomLeft + 'px';
+        }
+
+        // AJUSTADO: Fuga atenuada ao passar o mouse por perto (só pula metade das vezes para não irritar)
+        function fleeFromMouse() {
+            if (scoreCount < 3 && Math.random() > 0.5) {
+                moveHeartRandomly();
+            }
+        }
+
+        function playLoveGame() {
+            scoreCount++;
+            
+            if (scoreCount <= 3) {
+                gameScore.innerText = `Corações Coletados: ${scoreCount} / 3`;
+                gameFeedback.innerText = FRASES_GAME[scoreCount - 1];
+                moveHeartRandomly();
+            }
+            
+            if (scoreCount >= 3) {
+                clearInterval(gameMovementInterval);
+                gameBtn.style.fontSize = "2.8rem";
+                gameBtn.innerText = "❤️";
+                setTimeout(() => {
+                    startExperience();
+                }, 700);
             }
         }
 
@@ -544,7 +628,7 @@
             music.play().then(() => {
                 mediaBtn.innerText = "⏸️";
                 mediaBtn.classList.add('playing');
-            }).catch(e => console.log("Erro ao rodar áudio:", e));
+            }).catch(e => console.log("Áudio ativado pós-clique técnico."));
         }
 
         // GERADOR DE ELEMENTOS GRÁFICOS FLUTUANTES
@@ -588,9 +672,7 @@
                     <source src="video${j}.mp4" type="video/mp4">
                 </video>
             `;
-            
             const videoElement = wrapper.querySelector('video');
-            
             videoElement.addEventListener('play', () => {
                 if (!music.paused) {
                     music.pause();
@@ -598,12 +680,10 @@
                     mediaBtn.classList.remove('playing');
                 }
             });
-
             videoElement.addEventListener('ended', () => { changeVideo(1, true); });
             videoDestination.appendChild(wrapper);
         }
 
-        // REDIMENSIONAMENTO DINÂMICO
         function resizeContainer(element, type) {
             const container = type === 'photo' ? photoBox : videoBox;
             const originalWidth = element.naturalWidth || element.videoWidth;
@@ -674,14 +754,12 @@
             if (autoPlayNext && nextVideoElement) { setTimeout(() => { nextVideoElement.play().catch(e => {}); }, 300); }
         }
 
-        // --- CONTROLE DE MÍDIA MANUAL ---
         function toggleMusic() {
             if (music.paused) {
-                music.play()
-                    .then(() => {
-                        mediaBtn.innerText = "⏸️";
-                        mediaBtn.classList.add('playing');
-                    });
+                music.play().then(() => {
+                    mediaBtn.innerText = "⏸️";
+                    mediaBtn.classList.add('playing');
+                });
             } else {
                 music.pause();
                 mediaBtn.innerText = "▶️";
@@ -689,7 +767,6 @@
             }
         }
 
-        // Scroll Animado
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.05 });
